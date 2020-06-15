@@ -1,26 +1,39 @@
-import React from 'react'
-import ReactDOM from 'react-dom'
-import { AppContainer } from 'react-hot-loader'
-import Root from './config/root'
+import React, { useState } from 'react'
+import { history } from './redux'
 
-import './assets/scss/main.scss'
-
-const target = document.getElementById('root')
-
-const render = (Component) => {
-  ;(module.hot ? ReactDOM.render : ReactDOM.hydrate)(
-    <AppContainer>
-      <Component />
-    </AppContainer>,
-    target
+const Main = () => {
+  const [value, setValue] = useState('')
+  const onChange = (e) => {
+    setValue(e.target.value)
+  }
+  const onClick = () => {
+    history.push(`/${value}`)
+  }
+  return (
+    <div>
+      <div className="flex items-center justify-center h-screen">
+        <div className="bg-white hover:text-white-500 text-black font-bold rounded-lg border shadow-lg p-0.1">
+          <input
+            id="input-field"
+            value={value}
+            onChange={onChange}
+            type="text"
+            placeholder="input username"
+          />
+          <button
+            className="bg-blue-500 hover:bg-blue-400 text-white font-bold py-2 px-4 border-b-4 border-blue-700 hover:border-blue-500 rounded"
+            type="button"
+            onClick={onClick}
+            id="search-button"
+          >
+            Search
+          </button>
+        </div>
+      </div>
+    </div>
   )
 }
 
-render(Root)
+Main.propTypes = {}
 
-if (module.hot) {
-  module.hot.accept('./config/root', () => {
-    const newApp = require('./config/root').default
-    render(newApp)
-  })
-}
+export default React.memo(Main)
